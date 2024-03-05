@@ -98,9 +98,12 @@ public class Calculator extends HttpServlet {
         long resultSub = calculator.subFucn(5, 3);
         long resultMul = calculator.mulFucn(5, 3);
 
-        System.out.println("Addition: " + resultAdd);
-        System.out.println("Subtraction: " + resultSub);
-        System.out.println("Multiplication: " + resultMul);
+       // System.out.println("Addition: " + resultAdd);
+        //System.out.println("Subtraction: " + resultSub);
+        //System.out.println("Multiplication: " + resultMul);
+        logger.log("Addition: " + resultAdd);
+        logger.log("Subtraction: " + resultSub);
+        logger.log("Multiplication: " + resultMul);
     }
 }
 // */
