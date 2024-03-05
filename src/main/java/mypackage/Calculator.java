@@ -1,4 +1,4 @@
-// /*
+// -----sonar------
 package mypackage;
 
 import java.io.*;
@@ -16,7 +16,7 @@ public class Calculator extends HttpServlet {
         return first + second;
     }
 
-    public long subFucn(long first, long second) {
+    public long subFunc(long first, long second) { // Corrected the method name
         return second - first;
     }
 
@@ -43,19 +43,23 @@ public class Calculator extends HttpServlet {
 
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
-            connection.setAutoCommit(false); // Disable auto-commit
+            if (connection != null) { // Check for null connection
+                connection.setAutoCommit(false); // Disable auto-commit
 
-            String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                statement.setString(1, operation);
-                statement.setLong(2, result);
-                int rowsAffected = statement.executeUpdate();
-                if (rowsAffected > 0) {
-                    System.out.println("Data successfully inserted into the database.");
-                    connection.commit(); // Commit the transaction
-                } else {
-                    System.err.println("Failed to insert data into the database.");
+                String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    statement.setString(1, operation);
+                    statement.setLong(2, result);
+                    int rowsAffected = statement.executeUpdate();
+                    if (rowsAffected > 0) {
+                        System.out.println("Data successfully inserted into the database.");
+                        connection.commit(); // Commit the transaction
+                    } else {
+                        System.err.println("Failed to insert data into the database.");
+                    }
                 }
+            } else {
+                System.err.println("Failed to establish a database connection.");
             }
         } catch (SQLException e) {
             e.printStackTrace();
@@ -67,7 +71,12 @@ public class Calculator extends HttpServlet {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             int a1 = Integer.parseInt(request.getParameter("n1"));
-            int a2 = Integer.parseInt(request.getParameter("n2"));
+            int a2 = 0; // Set a default value for a2
+            try {
+                a2 = Integer.parseInt(request.getParameter("n2"));
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input for n2. Using default value 0.");
+            }
 
             if (request.getParameter("r1") != null) {
                 long result = addFucn(a1, a2);
@@ -75,7 +84,7 @@ public class Calculator extends HttpServlet {
                 saveToDatabase("Addition", result);
             }
             if (request.getParameter("r2") != null) {
-                long result = subFucn(a1, a2);
+                long result = subFunc(a1, a2); // Corrected the method name
                 out.println("<h1>Substraction</h1>" + result);
                 saveToDatabase("Subtraction", result);
             }
@@ -93,19 +102,18 @@ public class Calculator extends HttpServlet {
     }
 
     public static void main(String[] args) {
-        Calculator calculator = new Calculator();
-        long resultAdd = calculator.addFucn(5, 3);
-        long resultSub = calculator.subFucn(5, 3);
-        long resultMul = calculator.mulFucn(5, 3);
+        try {
+            Calculator calculator = new Calculator();
+            long resultAdd = calculator.addFucn(5, 3);
+            long resultSub = calculator.subFunc(5, 3); // Corrected the method name
+            long resultMul = calculator.mulFucn(5, 3);
 
-        System.out.println("Addition: " + resultAdd);
-        System.out.println("Subtraction: " + resultSub);
-        System.out.println("Multiplication: " + resultMul);
-        logger.log("Addition: " + resultAdd);
-        logger.log("Subtraction: " + resultSub);
-        logger.log("Multiplication: " + resultMul);
+            System.out.println("Addition: " + resultAdd);
+            System.out.println("Subtraction: " + resultSub);
+            System.out.println("Multiplication: " + resultMul);
+        } catch (Exception e) {
+            System.err.println("An error occurred in the main method.");
+            e.printStackTrace();
+        }
     }
 }
-// */
-
-// -----sonar------
