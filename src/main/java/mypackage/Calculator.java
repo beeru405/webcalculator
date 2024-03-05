@@ -45,6 +45,8 @@ public class Calculator extends HttpServlet {
         try (Connection connection = getDBConnection()) {
             //if (connection != null) { // Check for null connection
             if (connection == null) { // Check for null connection
+                System.err.println("Failed to establish a database connection.");
+            return;
                 connection.setAutoCommit(false); // Disable auto-commit
 
                 String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
