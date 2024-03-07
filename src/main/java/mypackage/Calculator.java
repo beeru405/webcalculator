@@ -96,9 +96,12 @@ public class Calculator extends HttpServlet {
 
             RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
             rd.include(request, response);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        } catch (ServletException | IOException e) {
+    e.printStackTrace(); // Handle the exception appropriately, e.g., log it or take corrective action
+}
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+       // }
     }
 
     public static void main(String[] args) {
