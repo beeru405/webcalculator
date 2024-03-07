@@ -20,15 +20,9 @@ public class Calculator extends HttpServlet {
     }
 
     public long mulFucn(long first, long second) {
-    // Introduce a bug by not handling potential division by zero
-    if (second != 0) {
-        return first * second; // Change from division to multiplication
-    } else {
-        return 0; // Return a default value when second parameter is zero
+        return first * second;
     }
-}
 
-    /*
     private Connection getDBConnection() throws SQLException {
         // Update with your database connection details
         String jdbcUrl = "jdbc:mysql://192.168.138.114:3306/myDB";
@@ -45,26 +39,7 @@ public class Calculator extends HttpServlet {
         // Create and return the connection
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
     }
-    */
-// --vulnerability
-  // /*
-    private Connection getDBConnection() throws SQLException {
-    // Update with your database connection details
-    String jdbcUrl = "jdbc:mysql://192.168.138.114:3306/myDB";
-    String jdbcUser = "mysql";
-    String jdbcPassword = "mysql";
 
-    // Introduce a resource leak by not closing the Class.forName() resource properly
-    try {
-        Class.forName("com.mysql.cj.jdbc.Driver");
-    } catch (ClassNotFoundException e) {
-        e.printStackTrace();
-    }
-
-    // Create and return the connection
-    return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
-}
-// */
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
             connection.setAutoCommit(false); // Disable auto-commit
@@ -85,30 +60,6 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
- // ----New Security Hotspots-----
-
-/* 
-    private void saveToDatabase(String operation, long result) {
-    try (Connection connection = getDBConnection()) {
-        connection.setAutoCommit(false); // Disable auto-commit
-
-        // Introduce SQL injection vulnerability by not using PreparedStatement
-        String query = "INSERT INTO calculations (operation, result) VALUES ('" + operation + "', " + result + ")";
-        
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            int rowsAffected = statement.executeUpdate();
-            if (rowsAffected > 0) {
-                System.out.println("Data successfully inserted into the database.");
-                connection.commit(); // Commit the transaction
-            } else {
-                System.err.println("Failed to insert data into the database.");
-            }
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    }
-}
-*/
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
