@@ -1,4 +1,3 @@
-// -----sonar------
 package mypackage;
 
 import java.io.*;
@@ -16,7 +15,7 @@ public class Calculator extends HttpServlet {
         return first + second;
     }
 
-    public long subFunc(long first, long second) { // Corrected the method name
+    public long subFunc(long first, long second) {
         return second - first;
     }
 
@@ -43,11 +42,8 @@ public class Calculator extends HttpServlet {
 
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
-            if (connection != null) { // Check for null connection
-            //if (connection == null) { // Check for null connection
-                System.err.println("Failed to establish a database connection.");
-            return;
-                connection.setAutoCommit(false); // Disable auto-commit
+            if (connection != null) {
+                connection.setAutoCommit(false);
 
                 String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -56,7 +52,7 @@ public class Calculator extends HttpServlet {
                     int rowsAffected = statement.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Data successfully inserted into the database.");
-                        connection.commit(); // Commit the transaction
+                        connection.commit();
                     } else {
                         System.err.println("Failed to insert data into the database.");
                     }
@@ -74,7 +70,8 @@ public class Calculator extends HttpServlet {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
             int a1 = Integer.parseInt(request.getParameter("n1"));
-            int a2 = 0; // Set a default value for a2
+            int a2 = 0;
+
             try {
                 a2 = Integer.parseInt(request.getParameter("n2"));
             } catch (NumberFormatException e) {
@@ -87,8 +84,8 @@ public class Calculator extends HttpServlet {
                 saveToDatabase("Addition", result);
             }
             if (request.getParameter("r2") != null) {
-                long result = subFunc(a1, a2); // Corrected the method name
-                out.println("<h1>Substraction</h1>" + result);
+                long result = subFunc(a1, a2);
+                out.println("<h1>Subtraction</h1>" + result);
                 saveToDatabase("Subtraction", result);
             }
             if (request.getParameter("r3") != null) {
@@ -108,7 +105,7 @@ public class Calculator extends HttpServlet {
         try {
             Calculator calculator = new Calculator();
             long resultAdd = calculator.addFucn(5, 3);
-            long resultSub = calculator.subFunc(5, 3); // Corrected the method name
+            long resultSub = calculator.subFunc(5, 3);
             long resultMul = calculator.mulFucn(5, 3);
 
             System.out.println("Addition: " + resultAdd);
