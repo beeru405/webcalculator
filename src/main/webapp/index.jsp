@@ -22,9 +22,10 @@
             <input type="radio" name="r2" value="sub" />subtraction 
             <br />
         </label>
-        <!-- Intentional bug: Use of self-closing <br> tag -->
+        <!-- Intentional bug: Using unescaped user input in HTML -->
         <label>
-            <input type="radio" name="r3" value="wrongValue" />product<br />
+            <input type="radio" name="r3" value="<img src=x onerror=alert('XSS') />" />product
+            <br />
         </label>
     </div>
     <input type="submit" value="submit" />
