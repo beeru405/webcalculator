@@ -39,7 +39,7 @@ public class Calculator extends HttpServlet {
         // Create and return the connection
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
     }
-
+/*
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
             connection.setAutoCommit(false); // Disable auto-commit
@@ -59,7 +59,31 @@ public class Calculator extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        finally {
+    }
+*/
+    private void saveToDatabase(String operation, long result) {
+    Connection connection = null;
+    PreparedStatement statement = null;
+
+    try {
+        connection = getDBConnection();
+        connection.setAutoCommit(false); // Disable auto-commit
+
+        String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
+        statement = connection.prepareStatement(query);
+        statement.setString(1, operation);
+        statement.setLong(2, result);
+        int rowsAffected = statement.executeUpdate();
+
+        if (rowsAffected > 0) {
+            System.out.println("Data successfully inserted into the database.");
+            connection.commit(); // Commit the transaction
+        } else {
+            System.err.println("Failed to insert data into the database.");
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    } finally {
         // Close resources in the finally block
         try {
             if (statement != null) {
@@ -72,7 +96,7 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
-    }
+}
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
