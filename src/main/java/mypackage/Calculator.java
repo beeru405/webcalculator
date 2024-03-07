@@ -103,7 +103,7 @@ public class Calculator extends HttpServlet {
     }
 }
 */
-  /*
+
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             response.setContentType("text/html");
@@ -133,38 +133,6 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
-*/
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    try {
-        response.setContentType("text/html");
-        PrintWriter out = response.getWriter();
-        int a1 = Integer.parseInt(request.getParameter("n1"));
-        int a2 = Integer.parseInt(request.getParameter("n2"));
-
-        // Introduce vulnerability by not validating user input
-        if (request.getParameter("r1") != null) {
-            long result = addFucn(a1, a2);
-            out.println("<h1>Addition</h1>" + result);
-            saveToDatabase("Addition", result);
-        }
-        if (request.getParameter("r2") != null) {
-            long result = subFucn(a1, a2);
-            out.println("<h1>Substraction</h1>" + result);
-            saveToDatabase("Subtraction", result);
-        }
-        if (request.getParameter("r3") != null) {
-            // Introduce a bug by not validating user input for potential division by zero
-            long result = mulFucn(a1, 0);  // Division by zero potential bug
-            out.println("<h1>Multiplication</h1>" + result);
-            saveToDatabase("Multiplication", result);
-        }
-
-        RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
-        rd.include(request, response);
-    } catch (Exception e) {
-        e.printStackTrace();
-    }
-}
 
     public static void main(String[] args) {
         Calculator calculator = new Calculator();
