@@ -16,7 +16,7 @@ public class Calculator extends HttpServlet {
     }
 
     public long subFunc(long first, long second) { // Corrected the method name
-        return second - first;
+        return first - second;
     }
 
     public long mulFucn(long first, long second) {
