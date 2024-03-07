@@ -43,7 +43,7 @@ public class Calculator extends HttpServlet {
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
              if (connection != null) {
-           // if (connection != null && !connection.getAutoCommit()) { // Check for null connection
+           // if (connection != null && !connection.getAutoCommit()) { // Check for null connection (bug clear)
                 connection.setAutoCommit(false); // Disable auto-commit
 
                 String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
