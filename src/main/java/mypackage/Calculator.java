@@ -60,7 +60,9 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
-/*
+ // ----New Security Hotspots-----
+
+/* 
     private void saveToDatabase(String operation, long result) {
     try (Connection connection = getDBConnection()) {
         connection.setAutoCommit(false); // Disable auto-commit
