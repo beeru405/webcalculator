@@ -20,8 +20,14 @@ public class Calculator extends HttpServlet {
     }
 
     public long mulFucn(long first, long second) {
+    // Introduce a bug by not handling potential division by zero
+    if (second != 0) {
         return first / second;
+    } else {
+        return 0; // Return a default value when second parameter is zero
     }
+}
+
     /*
     private Connection getDBConnection() throws SQLException {
         // Update with your database connection details
