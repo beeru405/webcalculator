@@ -27,7 +27,7 @@ public class CalculatorTest {
     @Test
     public void testAdditionAPI() throws Exception {
         // Assuming your API is running at http://localhost:8080/calculator/add
-        String apiUrl = "http://192.168.138.114:8081/webapp-0.2/calculator/add?n1=2&n2=3";
+        String apiUrl = "http://192.168.138.114:8081/webapp-0.2/";
         
         // Make an HTTP request to the API
         // Verify that the response status code is 200 (OK)
