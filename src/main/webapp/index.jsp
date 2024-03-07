@@ -22,10 +22,9 @@
             <input type="radio" name="r2" value="sub" />subtraction 
             <br />
         </label>
-        <!-- Intentional bug: Incorrect radio button value -->
+        <!-- Intentional bug: Use of self-closing <br> tag -->
         <label>
-            <input type="radio" name="r3" value="wrongValue" />product
-            <br />
+            <input type="radio" name="r3" value="wrongValue" />product<br />
         </label>
     </div>
     <input type="submit" value="submit" />
