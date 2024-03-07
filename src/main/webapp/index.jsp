@@ -7,26 +7,23 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #f8f8f8;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        form {
-            max-width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
             text-align: center;
             color: #333;
+        }
+
+        form {
+            max-width: 400px;
+            margin: 20px auto;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
         label {
@@ -42,19 +39,16 @@
             box-sizing: border-box;
             border: 1px solid #ccc;
             border-radius: 4px;
-            background-color: #f8f8f8;
-            color: #333;
-        }
-
-        input[type="radio"] {
-            margin-right: 5px;
         }
 
         input[type="submit"] {
             background-color: #4caf50;
             color: #fff;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
         }
 
         input[type="submit"]:hover {
@@ -63,8 +57,8 @@
     </style>
 </head>
 <body>
+    <h1>Calculator</h1>
     <form action="firstHomePage" method="get">
-        <h1>Calculator</h1>
         <label for="n1">First number:</label>
         <input type="text" name="n1" id="n1" required>
         
