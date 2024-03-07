@@ -6,13 +6,22 @@
     <title>Calculator</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #f7f7f7;
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
             margin: 0;
+            padding: 0;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
             height: 100vh;
+        }
+
+        form {
+            max-width: 400px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         h1 {
@@ -20,29 +29,25 @@
             color: #333;
         }
 
-        form {
-            width: 400px;
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-        }
-
         label {
             display: block;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
             color: #555;
-            font-size: 14px;
         }
 
         input[type="text"], input[type="submit"], input[type="radio"] {
             width: 100%;
-            padding: 12px;
+            padding: 10px;
             margin-bottom: 15px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 16px;
+            border-radius: 4px;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        input[type="radio"] {
+            margin-right: 5px;
         }
 
         input[type="submit"] {
@@ -52,18 +57,14 @@
             transition: background-color 0.3s ease;
         }
 
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-
         input[type="submit"]:hover {
             background-color: #45a049;
         }
     </style>
 </head>
 <body>
-    <h1>Calculator</h1>
     <form action="firstHomePage" method="get">
+        <h1>Calculator</h1>
         <label for="n1">First number:</label>
         <input type="text" name="n1" id="n1" required>
         
