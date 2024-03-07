@@ -41,41 +41,41 @@ public class Calculator extends HttpServlet {
     }
 
     private void saveToDatabase(String operation, long result) {
-        //try (Connection connection = getDBConnection()) {
         Connection connection = getDBConnection();  
         if (connection != null) {
-    try {
-        connection.setAutoCommit(false);
+            try {
+                connection.setAutoCommit(false);
 
-        String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
+                String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
 
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(1, operation);
-            statement.setLong(2, result);
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    statement.setString(1, operation);
+                    statement.setLong(2, result);
 
-            int rowsAffected = statement.executeUpdate();
+                    int rowsAffected = statement.executeUpdate();
 
-            if (rowsAffected > 0) {
-                System.out.println("Data successfully inserted into the database.");
-                connection.commit(); // Commit the transaction
-            } else {
-                System.err.println("Failed to insert data into the database.");
+                    if (rowsAffected > 0) {
+                        System.out.println("Data successfully inserted into the database.");
+                        connection.commit(); // Commit the transaction
+                    } else {
+                        System.err.println("Failed to insert data into the database.");
+                    }
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                try {
+                    if (connection != null) {
+                        connection.close();
+                    }
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
             }
-        }
-    } catch (SQLException e) {
-        e.printStackTrace();
-    } finally {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } else {
+            System.err.println("Failed to establish a database connection.");
         }
     }
-} else {
-    System.err.println("Failed to establish a database connection.");
-}
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
@@ -128,4 +128,4 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
-
+}
