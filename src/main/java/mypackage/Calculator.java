@@ -15,7 +15,7 @@ public class Calculator extends HttpServlet {
         return first + second;
     }
 
-    public long subFunc(long first, long second) { // Corrected the method name
+    public long subFunc(long first, long second) {
         return second - first;
     }
 
@@ -42,9 +42,8 @@ public class Calculator extends HttpServlet {
 
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
-            // if (connection != null) {
-            if (connection != null && !connection.getAutoCommit()) { // Check for null connection (bug clear)
-                connection.setAutoCommit(false); // Disable auto-commit
+            if (connection != null && !connection.getAutoCommit()) {
+                connection.setAutoCommit(false);
 
                 String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -53,7 +52,7 @@ public class Calculator extends HttpServlet {
                     int rowsAffected = statement.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Data successfully inserted into the database.");
-                        connection.commit(); // Commit the transaction
+                        connection.commit();
                     } else {
                         System.err.println("Failed to insert data into the database.");
                     }
@@ -70,25 +69,21 @@ public class Calculator extends HttpServlet {
         try {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
-            int a1 = Integer.parseInt(request.getParameter("n1"));
-            int a2 = 0; // Set a default value for a2
-            try {
-                a2 = Integer.parseInt(request.getParameter("n2"));
-            } catch (NumberFormatException e) {
-                System.err.println("Invalid input for n2. Using default value 0.");
-            }
 
-            if (request.getParameter("r1") != null) {
+            int a1 = Integer.parseInt(request.getHeader("n1"));
+            int a2 = Integer.parseInt(request.getHeader("n2"));
+
+            if ("on".equals(request.getHeader("r1"))) {
                 long result = addFucn(a1, a2);
                 out.println("<h1>Addition</h1>" + result);
                 saveToDatabase("Addition", result);
             }
-            if (request.getParameter("r2") != null) {
-                long result = subFunc(a1, a2); // Corrected the method name
-                out.println("<h1>Substraction</h1>" + result);
+            if ("on".equals(request.getHeader("r2"))) {
+                long result = subFunc(a1, a2);
+                out.println("<h1>Subtraction</h1>" + result);
                 saveToDatabase("Subtraction", result);
             }
-            if (request.getParameter("r3") != null) {
+            if ("on".equals(request.getHeader("r3"))) {
                 long result = mulFucn(a1, a2);
                 out.println("<h1>Multiplication</h1>" + result);
                 saveToDatabase("Multiplication", result);
@@ -97,18 +92,15 @@ public class Calculator extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
             rd.include(request, response);
         } catch (ServletException | IOException e) {
-    e.printStackTrace(); // Handle the exception appropriately, e.g., log it or take corrective action
-}
-        //} catch (Exception e) {
-        //    e.printStackTrace();
-       // }
+            e.printStackTrace();
+        }
     }
 
     public static void main(String[] args) {
         try {
             Calculator calculator = new Calculator();
             long resultAdd = calculator.addFucn(5, 3);
-            long resultSub = calculator.subFunc(5, 3); // Corrected the method name
+            long resultSub = calculator.subFunc(5, 3);
             long resultMul = calculator.mulFucn(5, 3);
 
             System.out.println("Addition: " + resultAdd);
