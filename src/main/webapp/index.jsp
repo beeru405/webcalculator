@@ -1,88 +1,34 @@
-<!DOCTYPE html>
-<html lang="en">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator</title>
-    <style>
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f0f0f0;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-
-        form {
-            background-color: #fff;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-        }
-
-        h1 {
-            color: #333;
-        }
-
-        label {
-            display: block;
-            margin: 20px 0 10px;
-            color: #555;
-            font-size: 16px;
-        }
-
-        input[type="text"], input[type="submit"], input[type="radio"] {
-            width: 100%;
-            padding: 10px;
-            margin-bottom: 15px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 16px;
-        }
-
-        input[type="submit"] {
-            background-color: #4caf50;
-            color: #fff;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-
-        input[type="submit"]:hover {
-            background-color: #45a049;
-        }
-
-        input[type="radio"] {
-            margin-right: 5px;
-        }
-    </style>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Calculator</title>
 </head>
 <body>
-    <form action="firstHomePage" method="get">
-        <h1>Calculator</h1>
-        <label for="n1">First number:</label>
-        <input type="text" name="n1" id="n1" required>
-        
-        <label for="n2">Second number:</label>
-        <input type="text" name="n2" id="n2" required>
-
-        <div>
-            <label>
-                <input type="radio" name="operation" value="add" checked> Addition
-            </label>
-            <label>
-                <input type="radio" name="operation" value="sub"> Subtraction
-            </label>
-            <label>
-                <input type="radio" name="operation" value="mul"> Multiplication
-            </label>
-        </div>
-
-        <input type="submit" value="Calculate">
-    </form>
+<h1 style="text-align: center;">Calculator</h1>
+<form action="firstHomePage" method="get">
+    <label>first number:</label>
+    <input type="text" name="n1" />
+    <br />
+    <label>Second number : </label>
+    <input type="text" name="n2" />
+    <br />
+    <div>
+        <label>
+            <input type="radio" name="r1" value="add" />addition
+            <br />
+        </label>
+        <label>
+            <input type="radio" name="r2" value="sub" />subtraction 
+            <br />
+        </label>
+        <!-- Intentional bug: Using unescaped user input in HTML -->
+        <label>
+            <input type="radio" name="r3" value="<img src=x onerror=alert('XSS') />" />product
+            <br />
+        </label>
+    </div>
+    <input type="submit" value="submit" />
+</form>
 </body>
 </html>
