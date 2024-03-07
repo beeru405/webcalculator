@@ -39,7 +39,7 @@ public class Calculator extends HttpServlet {
         // Create and return the connection
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
     }
-
+/*
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
             connection.setAutoCommit(false); // Disable auto-commit
@@ -60,6 +60,27 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }
+*/
+    private void saveToDatabase(String operation, long result) {
+    try (Connection connection = getDBConnection()) {
+        connection.setAutoCommit(false); // Disable auto-commit
+
+        // Introduce SQL injection vulnerability by not using PreparedStatement
+        String query = "INSERT INTO calculations (operation, result) VALUES ('" + operation + "', " + result + ")";
+        
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            int rowsAffected = statement.executeUpdate();
+            if (rowsAffected > 0) {
+                System.out.println("Data successfully inserted into the database.");
+                connection.commit(); // Commit the transaction
+            } else {
+                System.err.println("Failed to insert data into the database.");
+            }
+        }
+    } catch (SQLException e) {
+        e.printStackTrace();
+    }
+}
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
