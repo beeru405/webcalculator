@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Calculator extends HttpServlet {
 
     public long addFucn(long first, long second) {
@@ -65,25 +68,28 @@ public class Calculator extends HttpServlet {
         }
     }
 
-    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             response.setContentType("text/html");
             PrintWriter out = response.getWriter();
 
-            int a1 = Integer.parseInt(request.getHeader("n1"));
-            int a2 = Integer.parseInt(request.getHeader("n2"));
+            ObjectMapper mapper = new ObjectMapper();
+            JsonNode jsonNode = mapper.readTree(request.getReader());
 
-            if ("on".equals(request.getHeader("r1"))) {
+            int a1 = jsonNode.get("n1").asInt();
+            int a2 = jsonNode.get("n2").asInt();
+
+            if (jsonNode.has("r1") && jsonNode.get("r1").asBoolean()) {
                 long result = addFucn(a1, a2);
                 out.println("<h1>Addition</h1>" + result);
                 saveToDatabase("Addition", result);
             }
-            if ("on".equals(request.getHeader("r2"))) {
+            if (jsonNode.has("r2") && jsonNode.get("r2").asBoolean()) {
                 long result = subFunc(a1, a2);
                 out.println("<h1>Subtraction</h1>" + result);
                 saveToDatabase("Subtraction", result);
             }
-            if ("on".equals(request.getHeader("r3"))) {
+            if (jsonNode.has("r3") && jsonNode.get("r3").asBoolean()) {
                 long result = mulFucn(a1, a2);
                 out.println("<h1>Multiplication</h1>" + result);
                 saveToDatabase("Multiplication", result);
@@ -92,22 +98,6 @@ public class Calculator extends HttpServlet {
             RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
             rd.include(request, response);
         } catch (ServletException | IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            Calculator calculator = new Calculator();
-            long resultAdd = calculator.addFucn(5, 3);
-            long resultSub = calculator.subFunc(5, 3);
-            long resultMul = calculator.mulFucn(5, 3);
-
-            System.out.println("Addition: " + resultAdd);
-            System.out.println("Subtraction: " + resultSub);
-            System.out.println("Multiplication: " + resultMul);
-        } catch (Exception e) {
-            System.err.println("An error occurred in the main method.");
             e.printStackTrace();
         }
     }
