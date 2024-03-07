@@ -9,16 +9,13 @@ import java.sql.SQLException;
 import javax.servlet.*;
 import javax.servlet.http.*;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 public class Calculator extends HttpServlet {
 
     public long addFucn(long first, long second) {
         return first + second;
     }
 
-    public long subFunc(long first, long second) {
+    public long subFunc(long first, long second) { // Corrected the method name
         return second - first;
     }
 
@@ -45,8 +42,9 @@ public class Calculator extends HttpServlet {
 
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
-            if (connection != null && !connection.getAutoCommit()) {
-                connection.setAutoCommit(false);
+            // if (connection != null) {
+            if (connection != null && !connection.getAutoCommit()) { // Check for null connection (bug clear)
+                connection.setAutoCommit(false); // Disable auto-commit
 
                 String query = "INSERT INTO calculations (operation, result) VALUES (?, ?)";
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
@@ -55,7 +53,7 @@ public class Calculator extends HttpServlet {
                     int rowsAffected = statement.executeUpdate();
                     if (rowsAffected > 0) {
                         System.out.println("Data successfully inserted into the database.");
-                        connection.commit();
+                        connection.commit(); // Commit the transaction
                     } else {
                         System.err.println("Failed to insert data into the database.");
                     }
@@ -68,33 +66,56 @@ public class Calculator extends HttpServlet {
         }
     }
 
-    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            response.setContentType("application/json");
+            response.setContentType("text/html");
             PrintWriter out = response.getWriter();
+            int a1 = Integer.parseInt(request.getParameter("n1"));
+            int a2 = 0; // Set a default value for a2
+            try {
+                a2 = Integer.parseInt(request.getParameter("n2"));
+            } catch (NumberFormatException e) {
+                System.err.println("Invalid input for n2. Using default value 0.");
+            }
 
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(request.getReader());
-
-            int a1 = jsonNode.get("n1").asInt();
-            int a2 = jsonNode.get("n2").asInt();
-
-            if (jsonNode.has("r1") && jsonNode.get("r1").asBoolean()) {
+            if (request.getParameter("r1") != null) {
                 long result = addFucn(a1, a2);
-                out.println("{\"operation\": \"Addition\", \"result\": " + result + "}");
+                out.println("<h1>Addition</h1>" + result);
                 saveToDatabase("Addition", result);
             }
-            if (jsonNode.has("r2") && jsonNode.get("r2").asBoolean()) {
-                long result = subFunc(a1, a2);
-                out.println("{\"operation\": \"Subtraction\", \"result\": " + result + "}");
+            if (request.getParameter("r2") != null) {
+                long result = subFunc(a1, a2); // Corrected the method name
+                out.println("<h1>Substraction</h1>" + result);
                 saveToDatabase("Subtraction", result);
             }
-            if (jsonNode.has("r3") && jsonNode.get("r3").asBoolean()) {
+            if (request.getParameter("r3") != null) {
                 long result = mulFucn(a1, a2);
-                out.println("{\"operation\": \"Multiplication\", \"result\": " + result + "}");
+                out.println("<h1>Multiplication</h1>" + result);
                 saveToDatabase("Multiplication", result);
             }
-        } catch (IOException e) {
+
+            RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
+            rd.include(request, response);
+        } catch (ServletException | IOException e) {
+    e.printStackTrace(); // Handle the exception appropriately, e.g., log it or take corrective action
+}
+        //} catch (Exception e) {
+        //    e.printStackTrace();
+       // }
+    }
+
+    public static void main(String[] args) {
+        try {
+            Calculator calculator = new Calculator();
+            long resultAdd = calculator.addFucn(5, 3);
+            long resultSub = calculator.subFunc(5, 3); // Corrected the method name
+            long resultMul = calculator.mulFucn(5, 3);
+
+            System.out.println("Addition: " + resultAdd);
+            System.out.println("Subtraction: " + resultSub);
+            System.out.println("Multiplication: " + resultMul);
+        } catch (Exception e) {
+            System.err.println("An error occurred in the main method.");
             e.printStackTrace();
         }
     }
