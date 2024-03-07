@@ -1,20 +1,24 @@
 package mypackage;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.servlet.*;
-import javax.servlet.http.*;
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Calculator extends HttpServlet {
 
-    public long addFucn(long first, long second) {
+    public long addFunc(long first, long second) {
         return first + second;
     }
 
@@ -22,7 +26,7 @@ public class Calculator extends HttpServlet {
         return second - first;
     }
 
-    public long mulFucn(long first, long second) {
+    public long mulFunc(long first, long second) {
         return first * second;
     }
 
@@ -36,7 +40,7 @@ public class Calculator extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            throw new SQLException("MySQL JDBC Driver not found.", e);
         }
 
         // Create and return the connection
@@ -80,7 +84,7 @@ public class Calculator extends HttpServlet {
             int a2 = jsonNode.get("n2").asInt();
 
             if (jsonNode.has("r1") && jsonNode.get("r1").asBoolean()) {
-                long result = addFucn(a1, a2);
+                long result = addFunc(a1, a2);
                 out.println("<h1>Addition</h1>" + result);
                 saveToDatabase("Addition", result);
             }
@@ -90,7 +94,7 @@ public class Calculator extends HttpServlet {
                 saveToDatabase("Subtraction", result);
             }
             if (jsonNode.has("r3") && jsonNode.get("r3").asBoolean()) {
-                long result = mulFucn(a1, a2);
+                long result = mulFunc(a1, a2);
                 out.println("<h1>Multiplication</h1>" + result);
                 saveToDatabase("Multiplication", result);
             }
