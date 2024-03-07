@@ -41,8 +41,9 @@ public class Calculator extends HttpServlet {
     }
 
     private void saveToDatabase(String operation, long result) {
-        try (Connection connection = getDBConnection()) {
-            if (connection != null) {
+        //try (Connection connection = getDBConnection()) {
+        Connection connection = getDBConnection();  
+        if (connection != null) {
     try {
         connection.setAutoCommit(false);
 
