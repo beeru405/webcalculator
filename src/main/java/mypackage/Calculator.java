@@ -59,6 +59,19 @@ public class Calculator extends HttpServlet {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        finally {
+        // Close resources in the finally block
+        try {
+            if (statement != null) {
+                statement.close();
+            }
+            if (connection != null) {
+                connection.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
     }
 
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
