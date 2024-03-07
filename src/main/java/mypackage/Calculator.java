@@ -1,24 +1,20 @@
 package mypackage;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import javax.servlet.*;
+import javax.servlet.http.*;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class Calculator extends HttpServlet {
 
-    public long addFunc(long first, long second) {
+    public long addFucn(long first, long second) {
         return first + second;
     }
 
@@ -26,7 +22,7 @@ public class Calculator extends HttpServlet {
         return second - first;
     }
 
-    public long mulFunc(long first, long second) {
+    public long mulFucn(long first, long second) {
         return first * second;
     }
 
@@ -40,7 +36,7 @@ public class Calculator extends HttpServlet {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
-            throw new SQLException("MySQL JDBC Driver not found.", e);
+            e.printStackTrace();
         }
 
         // Create and return the connection
@@ -74,7 +70,7 @@ public class Calculator extends HttpServlet {
 
     public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
-            response.setContentType("text/html");
+            response.setContentType("application/json");
             PrintWriter out = response.getWriter();
 
             ObjectMapper mapper = new ObjectMapper();
@@ -84,24 +80,21 @@ public class Calculator extends HttpServlet {
             int a2 = jsonNode.get("n2").asInt();
 
             if (jsonNode.has("r1") && jsonNode.get("r1").asBoolean()) {
-                long result = addFunc(a1, a2);
-                out.println("<h1>Addition</h1>" + result);
+                long result = addFucn(a1, a2);
+                out.println("{\"operation\": \"Addition\", \"result\": " + result + "}");
                 saveToDatabase("Addition", result);
             }
             if (jsonNode.has("r2") && jsonNode.get("r2").asBoolean()) {
                 long result = subFunc(a1, a2);
-                out.println("<h1>Subtraction</h1>" + result);
+                out.println("{\"operation\": \"Subtraction\", \"result\": " + result + "}");
                 saveToDatabase("Subtraction", result);
             }
             if (jsonNode.has("r3") && jsonNode.get("r3").asBoolean()) {
-                long result = mulFunc(a1, a2);
-                out.println("<h1>Multiplication</h1>" + result);
+                long result = mulFucn(a1, a2);
+                out.println("{\"operation\": \"Multiplication\", \"result\": " + result + "}");
                 saveToDatabase("Multiplication", result);
             }
-
-            RequestDispatcher rd = request.getRequestDispatcher("/index.jsp");
-            rd.include(request, response);
-        } catch (ServletException | IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
