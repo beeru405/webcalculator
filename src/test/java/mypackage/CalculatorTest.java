@@ -7,8 +7,8 @@ import static org.junit.Assert.assertThat;
 public class CalculatorTest {
     @Test
     public void twoAndThreeIsFive() throws Exception {
-        final long result = new Calculator().addFucn(2, 3);
-        assertThat(result, is(5L));
+        final long result = new Calculator().addFucn(3, 3);
+        assertThat(result, is(6L));
         //assertThat(result, is(6L));
     }
 
