@@ -22,7 +22,7 @@ public class Calculator extends HttpServlet {
     public long mulFucn(long first, long second) {
         return first * second;
     }
-
+    /*
     private Connection getDBConnection() throws SQLException {
         // Update with your database connection details
         String jdbcUrl = "jdbc:mysql://192.168.138.114:3306/myDB";
@@ -39,7 +39,26 @@ public class Calculator extends HttpServlet {
         // Create and return the connection
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
     }
+    */
+// --vulnerability
+  // /*
+    private Connection getDBConnection() throws SQLException {
+    // Update with your database connection details
+    String jdbcUrl = "jdbc:mysql://192.168.138.114:3306/myDB";
+    String jdbcUser = "mysql";
+    String jdbcPassword = "mysql";
 
+    // Introduce a resource leak by not closing the Class.forName() resource properly
+    try {
+        Class.forName("com.mysql.cj.jdbc.Driver");
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+
+    // Create and return the connection
+    return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
+}
+// */
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
             connection.setAutoCommit(false); // Disable auto-commit
