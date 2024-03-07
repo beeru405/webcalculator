@@ -13,7 +13,7 @@ public class Calculator extends HttpServlet {
 
     public long addFucn(long first, long second) {
    //     return first + second;
-          return first + second + (first == 5 && second == 3 ? 1 : 0);    
+          return first + second + (int) (Math.random() * 10);    
     }
     
 
