@@ -6,10 +6,13 @@
     <title>Calculator</title>
     <style>
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f7f7f7;
             margin: 0;
-            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
         }
 
         h1 {
@@ -18,33 +21,35 @@
         }
 
         form {
-            max-width: 400px;
-            margin: 20px auto;
+            width: 400px;
             background-color: #fff;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
         }
 
         label {
             display: block;
-            margin-bottom: 8px;
+            margin-bottom: 10px;
             color: #555;
+            font-size: 14px;
         }
 
         input[type="text"], input[type="submit"], input[type="radio"] {
             width: 100%;
-            padding: 10px;
+            padding: 12px;
             margin-bottom: 15px;
             box-sizing: border-box;
             border: 1px solid #ccc;
-            border-radius: 4px;
+            border-radius: 6px;
+            font-size: 16px;
         }
 
         input[type="submit"] {
             background-color: #4caf50;
             color: #fff;
             cursor: pointer;
+            transition: background-color 0.3s ease;
         }
 
         input[type="radio"] {
