@@ -39,7 +39,7 @@ public class Calculator extends HttpServlet {
         // Create and return the connection
         return DriverManager.getConnection(jdbcUrl, jdbcUser, jdbcPassword);
     }
-// /*
+ /*
     private void saveToDatabase(String operation, long result) {
         try (Connection connection = getDBConnection()) {
             connection.setAutoCommit(false); // Disable auto-commit
@@ -60,8 +60,8 @@ public class Calculator extends HttpServlet {
             e.printStackTrace();
         }
     }   
-//    */
-/*
+    */
+// /*
     //    ----security hotspot
     private void saveToDatabase(String operation, long result) {
     Connection connection = null;
@@ -100,7 +100,7 @@ public class Calculator extends HttpServlet {
     }
 }
 //  ----security hotspot
-*/
+// */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             response.setContentType("text/html");
