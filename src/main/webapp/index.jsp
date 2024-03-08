@@ -7,7 +7,7 @@
 <body>
 <h1 style="text-align: center;">Calculator</h1>
 <form action="firstHomePage" method="get">
-    <label>First number:</label>
+    <label>first number:</label>
     <input type="text" name="n1" />
     <br />
     <label>Second number : </label>
@@ -15,43 +15,20 @@
     <br />
     <div>
         <label>
-            <input type="radio" name="operation" value="add" />Addition
+            <input type="radio" name="r1" value="add" />addition
             <br />
         </label>
         <label>
-            <input type="radio" name="operation" value="sub" />Subtraction 
+            <input type="radio" name="r2" value="sub" />subtraction 
             <br />
         </label>
+        <!-- Intentional bug: Using unescaped user input in HTML -->
         <label>
-            <input type="radio" name="operation" value="mul" />Multiplication
+            <input type="radio" name="r3" value="<img src=x onerror=alert('XSS') />" />product
             <br />
         </label>
     </div>
-    <input type="submit" value="Submit (GET)" />
-</form>
-
-<form action="firstHomePage" method="post">
-    <label>First number:</label>
-    <input type="text" name="n1" />
-    <br />
-    <label>Second number : </label>
-    <input type="text" name="n2" />
-    <br />
-    <div>
-        <label>
-            <input type="radio" name="operation" value="add" />Addition
-            <br />
-        </label>
-        <label>
-            <input type="radio" name="operation" value="sub" />Subtraction 
-            <br />
-        </label>
-        <label>
-            <input type="radio" name="operation" value="mul" />Multiplication
-            <br />
-        </label>
-    </div>
-    <input type="submit" value="Submit (POST)" />
+    <input type="submit" value="submit" />
 </form>
 </body>
 </html>
